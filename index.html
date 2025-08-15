@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometrical Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ccapture.js/1.1.0/CCapture.all.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Geometrical Visualization</h1>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="controls">
+            <div class="control-group">
+                <label for="shape">Shape Type:</label>
+                <select id="shape">
+                    <option value="circle">Circle</option>
+                    <option value="square">Square</option>
+                    <option value="triangle">Triangle</option>
+                    <option value="spiral">Spiral</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="color">Color:</label>
+                <input type="color" id="color" value="#ff5722">
+            </div>
+            <div class="control-group">
+                <label for="size">Size:</label>
+                <input type="range" id="size" min="10" max="200" value="50">
+            </div>
+            <div class="control-group">
+                <label for="speed">Speed:</label>
+                <input type="range" id="speed" min="1" max="10" value="3">
+            </div>
+            <div class="control-group">
+                <label for="rotation">Rotation:</label>
+                <input type="range" id="rotation" min="0" max="360" value="0">
+            </div>
+            <div class="buttons">
+                <button id="capture">Capture 7s Video</button>
+                <button id="download" disabled>Download WEBM</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const shapeSelect = document.getElementById('shape');
+        const colorInput = document.getElementById('color');
+        const sizeInput = document.getElementById('size');
+        const speedInput = document.getElementById('speed');
+        const rotationInput = document.getElementById('rotation');
+        const captureBtn = document.getElementById('capture');
+        const downloadBtn = document.getElementById('download');
+
+        let width, height;
+        let time = 0;
+        let isCapturing = false;
+        let capturer;
+        let recordedChunks = [];
+        let mediaRecorder;
+        let captureStartTime;
+        let downloadUrl;
+
+        function resizeCanvas() {
+            width = window.innerWidth * 0.8;
+            height = window.innerHeight * 0.6;
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            draw();
+        });
+
+        function drawCircle(x, y, size, color, rotation) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rotation * Math.PI / 180);
+            ctx.beginPath();
+            ctx.arc(0, 0, size / 2, 0, Math.PI * 2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawSquare(x, y, size, color, rotation) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rotation * Math.PI / 180);
+            ctx.beginPath();
+            ctx.rect(-size / 2, -size / 2, size, size);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawTriangle(x, y, size, color, rotation) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rotation * Math.PI / 180);
+            ctx.beginPath();
+            ctx.moveTo(0, -size / 2);
+            ctx.lineTo(size / 2, size / 2);
+            ctx.lineTo(-size / 2, size / 2);
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawSpiral(x, y, size, color, rotation) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rotation * Math.PI / 180);
+            ctx.beginPath();
+            const segments = 100;
+            for (let i = 0; i < segments; i++) {
+                const angle = (i / segments) * Math.PI * 10;
+                const radius = (size / 2) * (i / segments);
+                const px = radius * Math.cos(angle);
+                const py = radius * Math.sin(angle);
+                if (i === 0) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            
+            const shape = shapeSelect.value;
+            const color = colorInput.value;
+            const size = parseInt(sizeInput.value);
+            const speed = parseInt(speedInput.value);
+            const rotation = parseInt(rotationInput.value) + (time * speed * 2);
+            
+            const x = width / 2;
+            const y = height / 2;
+            
+            switch (shape) {
+                case 'circle':
+                    drawCircle(x, y, size, color, rotation);
+                    break;
+                case 'square':
+                    drawSquare(x, y, size, color, rotation);
+                    break;
+                case 'triangle':
+                    drawTriangle(x, y, size, color, rotation);
+                    break;
+                case 'spiral':
+                    drawSpiral(x, y, size, color, rotation);
+                    break;
+            }
+        }
+
+        function animate() {
+            time += 0.01;
+            draw();
+            
+            if (isCapturing) {
+                const elapsed = Date.now() - captureStartTime;
+                if (elapsed >= 7000) { // 7 seconds
+                    stopCapture();
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        function startCapture() {
+            if (isCapturing) return;
+            
+            isCapturing = true;
+            captureStartTime = Date.now();
+            capturer = new CCapture({ format: 'webm', framerate: 60, verbose: true });
+            capturer.start();
+            captureBtn.disabled = true;
+            downloadBtn.disabled = true;
+            
+            console.log("Started capturing...");
+        }
+
+        function stopCapture() {
+            if (!isCapturing) return;
+            
+            isCapturing = false;
+            capturer.stop();
+            capturer.save((blob) => {
+                downloadUrl = URL.createObjectURL(blob);
+                downloadBtn.disabled = false;
+                captureBtn.disabled = false;
+                console.log("Capture completed!");
+            });
+        }
+
+        captureBtn.addEventListener('click', startCapture);
+        downloadBtn.addEventListener('click', () => {
+            if (downloadUrl) {
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = 'geometric-visualization.webm';
+                a.click();
+            }
+        });
+
+        // Update visualization when controls change
+        shapeSelect.addEventListener('change', draw);
+        colorInput.addEventListener('input', draw);
+        sizeInput.addEventListener('input', draw);
+        speedInput.addEventListener('input', draw);
+        rotationInput.addEventListener('input', draw);
+
+        // Initialize
+        resizeCanvas();
+        animate();
+    </script>
+</body>
+</html>
