@@ -1,43 +1,43 @@
-# Geometrical Visualization with Video Capture
+# Geometric Visualization with Video Capture
 
-This project provides a simple web-based visualization of geometrical shapes with adjustable settings and the ability to record a 7-second WEBM video of the animation.
+A web-based interactive geometric visualization tool with adjustable settings and 7-second WEBM video capture functionality.
+
+![Screenshot](screenshot.png) *(Note: You would add an actual screenshot file later)*
 
 ## Features
 
-- Select different shapes: Circle, Square, Triangle
-- Change shape color
-- Adjust shape size
-- Start and stop recording with a single click
-- Automatically captures a 7-second animation
-- Download the recorded WEBM video
+- **Interactive geometric visualizations**: Circle, Square, Triangle, and Spiral
+- **Adjustable parameters**:
+  - Shape type
+  - Color picker
+  - Size control
+  - Rotation speed
+  - Manual rotation
+- **Video capture**: Record 7-second WEBM videos of the visualization
+- **Download functionality**: Save your creations as video files
+- **Responsive design**: Works on various screen sizes
 
-## Files Included
+## Technologies Used
 
-- `index.html` — the main webpage with visualization and controls
-- `styles.css` — styling for the webpage
+- HTML5 Canvas for rendering
+- JavaScript for animation and interactivity
+- CCapture.js for video capture
+- Pure CSS for styling
 
-## How to Use
+## Installation
 
-1. **Open `index.html`** in your web browser.
-2. Use the dropdown menu to select a shape.
-3. Pick a color using the color picker.
-4. Adjust the size slider to change the shape's size.
-5. Click **Start Recording** to begin the 7-second animation capture.
-6. The animation will automatically stop after 7 seconds, and a download link for the WEBM video will appear.
-7. Click the download link to save the video.
+No installation required! Just open the HTML file in a modern browser.
 
-## Requirements
+1. Download or clone this repository
+2. Open `index.html` in your browser
 
-- Modern web browser (Chrome, Firefox, Edge, etc.) with support for `canvas.captureStream()` and `MediaRecorder`.
+*Note:* For video capture to work properly, it's recommended to:
+- Use Chrome or Firefox
+- Serve the files through a local web server (due to browser security restrictions)
 
-## Customization
+### Quick Local Server Setup
 
-You can modify the code in `index.html` and `styles.css` to change shapes, colors, animation speed, or add more features.
+If you have Python installed:
 
-## License
-
-This project is provided as-is for educational purposes. Feel free to adapt and extend it!
-
----
-
-**Enjoy creating your geometrical animations!**
+```bash
+python -m http.server 8000
