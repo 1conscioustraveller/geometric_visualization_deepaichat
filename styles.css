@@ -1,18 +1,146 @@
-/* same as before */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: system-ui, sans-serif;
-  background: #111;
-  color: #eee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+:root {
+    --primary: #6a11cb;
+    --secondary: #2575fc;
 }
-#wrapper { display: flex; gap: 1.5rem; align-items: flex-start; }
-canvas { border: 1px solid #333; }
-#controls { display: flex; flex-direction: column; gap: 1rem; }
-label { display: flex; flex-direction: column; font-size: .9rem; }
-input[type=range] { width: 160px; margin-top: .3rem; }
-button { padding: .6rem 1rem; font-size: .9rem; cursor: pointer; border: none; background: #0a84ff; color: #fff; border-radius: 4px; transition: background .15s; }
-button:disabled { background: #555; cursor: not-allowed; }
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+}
+
+.controls {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.control-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.control-group label {
+    display: inline-block;
+    width: 100px;
+    font-weight: bold;
+    margin-right: 15px;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.control-group input[type="range"] {
+    flex-grow: 1;
+    height: 8px;
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    outline: none;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.control-group input[type="color"] {
+    width: 50px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+select option {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+button {
+    padding: 12px 20px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    flex: 1;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:disabled {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
