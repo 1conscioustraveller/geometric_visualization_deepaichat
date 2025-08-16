@@ -1,146 +1,51 @@
-:root {
-    --primary: #6a11cb;
-    --secondary: #2575fc;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    min-height: 100vh;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-h1 {
-    text-align: center;
-    color: white;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-}
-
-.canvas-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-}
-
-canvas {
-    display: block;
-}
-
-.controls {
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.control-group {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-}
-
-.control-group label {
-    display: inline-block;
-    width: 100px;
-    font-weight: bold;
-    margin-right: 15px;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-}
-
-.control-group input[type="range"] {
-    flex-grow: 1;
-    height: 8px;
-    -webkit-appearance: none;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    outline: none;
-}
-
-.control-group input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: white;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-.control-group input[type="color"] {
-    width: 50px;
-    height: 30px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-select {
-    padding: 8px 12px;
-    border-radius: 5px;
-    border: none;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    flex-grow: 1;
-    cursor: pointer;
-}
-
-select option {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.buttons {
-    display: flex;
-    gap: 15px;
-    margin-top: 30px;
-}
-
-button {
-    padding: 12px 20px;
-    background: linear-gradient(45deg, var(--primary), var(--secondary));
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    flex: 1;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-}
-
-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-button:active {
-    transform: translateY(1px);
-}
-
-button:disabled {
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.5);
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychedelic Geometric Visualizer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ccapture.js/1.1.0/CCapture.all.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🌀 Psychedelic Geometry Visualizer</h1>
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="controls">
+            <div class="control-group">
+                <label for="pattern">Pattern:</label>
+                <select id="pattern">
+                    <option value="hypnotic">Hypnotic Circles</option>
+                    <option value="fractal">Fractal Flower</option>
+                    <option value="tunnel">Infinity Tunnel</option>
+                    <option value="wave">Color Wave</option>
+                    <option value="mandala">Sacred Mandala</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="color1">Color 1:</label>
+                <input type="color" id="color1" value="#ff00ff">
+            </div>
+            <div class="control-group">
+                <label for="color2">Color 2:</label>
+                <input type="color" id="color2" value="#00ffff">
+            </div>
+            <div class="control-group">
+                <label for="speed">Speed:</label>
+                <input type="range" id="speed" min="0.1" max="5" step="0.1" value="1">
+            </div>
+            <div class="control-group">
+                <label for="complexity">Complexity:</label>
+                <input type="range" id="complexity" min="3" max="20" value="8">
+            </div>
+            <div class="buttons">
+                <button id="capture">🌀 Capture 7s Trip</button>
+                <button id="download" disabled>💾 Download WEBM</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
